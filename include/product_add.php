@@ -1,38 +1,45 @@
-<?php
+ <?php
 
-include_once 'connect.php';
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "ScandiWeb_DB";
 
-/**
-* 
-*/
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
 class Product_Add
 {
-	function addToList()
+	var $Weight = "";
+	var $Size = "";
+	var $Dim = "";
+
+	function addToList($sku, $name, $price, mysqli $conn)
 	{
 		$sql = "INSERT INTO List (SKU, Name, Price)
 		VALUES ('$sku', '$name', '$price')";
 		mysqli_query($conn,$sql);
 	}
 
-	function addToList($table)
+	function addToSecondaryList($table,$sku, $conn)
 	{
-		addToList();
 		if($table == "Books"){
 			$sql = "INSERT INTO Books (SKU, Weight)
-			VALUES ('$sku', '$Weight')";
-			mysqli_query($conn,$sql);
+			VALUES ('$sku', '$this->Weight')";
+			mysqli_query($conn, $sql);
 		}
 
 		if($table == "DVD"){
 			$sql = "INSERT INTO DVD (SKU, Size)
-			VALUES ('$sku', '$Size')";
-			mysqli_query($conn,$sql);
+			VALUES ('$sku', '$this->Size')";
+			mysqli_query($conn, $sql);
 		}
 
 		if($table == "Furniture"){
 			$sql = "INSERT INTO Furniture (SKU, )
-			VALUES ('$sku', '$')";
-			mysqli_query($conn,$sql);
+			VALUES ('$sku', '$this->Dim')";
+			mysqli_query($conn, $sql);
 		}
 	}
 }
+?>

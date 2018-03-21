@@ -48,7 +48,6 @@
 		<div class="form-group">
 			<label class="control-label col-md-2" for="Price">Price</label><input type="number" name="Price" placeholder="0.00" style="text-align: right;"> <strong>EUR</strong>
 		</div>
-		<input type="submit" value="Add Employee">
 		<div class="form-group">
 			<label class="control-label col-md-2" for="switcher">Type Switcher</label>
 			<select name="switch" id="switcher">
@@ -66,8 +65,6 @@
 				</option>
 			</select>
 		</div>
-	</form>
-	<form action="">
 		<!-- /////////////////////////////////////////////////////////////// -->
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -76,7 +73,7 @@
         				$(".form-group.switched").hide();
             			var gg = $(this).attr("value");
             			if(gg){
-            				$("." + gg).show();
+            				$("." + gg).show(1000);
                 			$(".form-group.switched").not("." + gg).hide();
             			} else{
                				$(".form-group.switched").hide();
@@ -86,7 +83,6 @@
 			});
 		</script>
 		<!-- /////////////////////////////////////////////////////////////// -->
-
 		<div class="DVD form-group switched">
 			<label class="control-label col-md-2" for="Size">
 				Size
@@ -102,29 +98,45 @@
 			<strong>kg</strong>
     	</div>
     	<div class="Furniture form-group switched">
-    		<label class="control-label col-md-2" for="X">
-				X
-			</label>
-			<input type="number" name="X" placeholder="">
-			<strong>mm</strong>
-			</br>
-			<label class="control-label col-md-2" for="Y">
-				Y
-			</label>
-			<input type="number" name="Y" placeholder="">
-			<strong>mm</strong>
-			</br>
-			<label class="control-label col-md-2" for="Z">
-				Z
-			</label>
-			<input type="number" name="Z" placeholder="">
-			<strong>mm</strong>
-			<?php
-				
-			?>
+    		<div class="form-group">
+    			<label class="control-label col-md-2" for="Width">
+				Width
+				</label>
+				<input type="number" name="Width" placeholder="">
+				<strong>mm</strong>
+    		</div>
+    		<div class="form-group">
+    			<label class="control-label col-md-2" for="Heigth">
+				Height
+				</label>
+				<input type="number" name="Height" placeholder="">
+				<strong>mm</strong>
+    		</div>
+    		<div class="form-group">
+    			<label class="control-label col-md-2" for="Length">
+				Length
+				</label>
+				<input type="number" name="Length" placeholder="">
+				<strong>mm</strong>
+    		</div>
     	</div>
-
+    	<div class="form-group">
+    		<label class="control-label col-md-2" for="btn1">
+				<strong>Press here --></strong>
+			</label>
+			<input type="submit" class="btn1" name="btn1">
+    	</div>
 	</form>
+	<?php 
+		if (isset($_POST['btn1'])) {
+			$first = new Product_Add();
+			$first->addToList($_POST['SKU'], $_POST['Name'], $_POST['Price'], $conn);
+			$first->Weight = $_POST['Weight'];
+			$first->Size = $_POST['Size'];
+			$first->Dim = $_POST['Width'].'x'.$_POST['Height'].'x'.$_POST['Length'];
+			$first->addToSecondaryList($_POST['switch'], $_POST['SKU'], $conn);
+		}
+	?>
 	
 </body>
 </html>
