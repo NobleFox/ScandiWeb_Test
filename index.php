@@ -73,7 +73,7 @@
         				$(".form-group.switched").hide();
             			var gg = $(this).attr("value");
             			if(gg){
-            				$("." + gg).show();
+            				$("." + gg).show(1000);
                 			$(".form-group.switched").not("." + gg).hide();
             			} else{
                				$(".form-group.switched").hide();
