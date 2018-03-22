@@ -2,4 +2,5 @@
 
 
 1) DB +
-2) Add Design web 
+2) Add Design web + Animation +
+3) Add Add List +
