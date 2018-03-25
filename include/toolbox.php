@@ -8,7 +8,7 @@ $dbname = "ScandiWeb_DB";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-class Product_Add
+class ToolBox
 {
 	var $Weight = "";
 	var $Size = "";
@@ -21,10 +21,23 @@ class Product_Add
 		mysqli_query($conn,$sql);
 	}
 
+	function Check($sku, $conn)
+	{
+		$sql = "SELECT `List`.`SKU` FROM List";
+		$result = mysqli_query($conn, $sql);
+		while ($data = $result->fetch_assoc()):
+			if ($data["SKU"]== $sku) {
+				return false;
+			}else{
+				return true;
+			}
+		endwhile;
+	}
+
 	function addToSecondaryList($table,$sku, $conn)
 	{
-		if($table == "Books"){
-			$sql = "INSERT INTO Books (SKU, Weight)
+		if($table == "Book"){
+			$sql = "INSERT INTO Book (SKU, Weight)
 			VALUES ('$sku', '$this->Weight')";
 			mysqli_query($conn, $sql);
 		}
@@ -36,10 +49,32 @@ class Product_Add
 		}
 
 		if($table == "Furniture"){
-			$sql = "INSERT INTO Furniture (SKU, )
+			$sql = "INSERT INTO Furniture (SKU, Dimensions)
 			VALUES ('$sku', '$this->Dim')";
 			mysqli_query($conn, $sql);
 		}
+	}
+
+	function ShowMeTheList($table, $conn)
+	{
+		//FULL JOIN
+		$sql = "SELECT * FROM List 
+				Left JOIN $table ON `List`.`SKU` = `$table`.`SKU`     
+				UNION
+				SELECT * FROM List 
+				Right JOIN $table ON `List`.`SKU` = `$table`.`SKU`";
+		return $sql;				
+	}
+
+	function DALEK_MODE_ON()
+	{	
+		$sql = "DELETE * FROM List";
+		mysqli_query($conn,$sql);
+	}
+
+	function test()
+	{
+		echo "HI";
 	}
 }
 ?>
