@@ -74,7 +74,7 @@ class ToolBox
 
 	function test()
 	{
-		echo "HI";
+		echo "<script>alert('I AM FUCKING GENIUUS');</script>";
 	}
 }
 ?>

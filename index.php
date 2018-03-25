@@ -213,14 +213,25 @@
 	        <div class="list col-lg-12 col-md-12 col-sm-12 col-xs-12">
 	            <h1 class="Title">List</h1>
 	        </div>
-
-	        <div align="center">
+			
+			<div align="center">
 	            <button class="btn btn-default filter-button" data-filter="all">All</button>
 	            <button class="btn btn-default filter-button" data-filter="DVD">DVD</button>
 	            <button class="btn btn-default filter-button" data-filter="Book">Books</button>
 	            <button class="btn btn-default filter-button" data-filter="Furniture">Furniture</button>
-	            <!-- <button class="btn btn-default DALEK" onclick="tester()">MASS DELETE</button> -->
+			<form method="post">
+	            <button class="btn btn-default" name="DALEK" type="submit">MASS DELETE</button>
 	        </div>
+			</form>
+	        
+
+			<?php 
+				$gg = new ToolBox();
+				if(isset($_POST['DALEK'])){
+					$gg->DALEK_MODE_ON();
+				}
+			?>
+
 	        <!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	        <!-- Show DVD -->
 	        <?php 
