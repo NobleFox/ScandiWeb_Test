@@ -192,7 +192,6 @@
 						$first->Size = $_POST['Size'];
 						$first->Dim = $_POST['Width'].'x'.$_POST['Height'].'x'.$_POST['Length'];
 						$first->addToSecondaryList($_POST['switch'], $_POST['SKU'], $conn);
-						echo "<script>alert('I AM FUCKING GENIUUS');</script>"; //+
 					}else{
 						echo "<script>alert('Already exists');</script>";
 					}

@@ -71,10 +71,5 @@ class ToolBox
 		$sql = "DELETE * FROM List";
 		mysqli_query($conn,$sql);
 	}
-
-	function test()
-	{
-		echo "<script>alert('I AM FUCKING GENIUUS');</script>";
-	}
 }
 ?>
