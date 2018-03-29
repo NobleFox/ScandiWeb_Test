@@ -55,7 +55,7 @@ class ToolBox
 		}
 	}
 
-	function ShowMeTheList($table, $conn)
+	function ShowMeTheList($table)
 	{
 		//FULL JOIN
 		$sql = "SELECT * FROM List 
@@ -66,10 +66,10 @@ class ToolBox
 		return $sql;				
 	}
 
-	function DALEK_MODE_ON()
-	{	
-		$sql = "DELETE * FROM List";
-		mysqli_query($conn,$sql);
-	}
+//	function DALEK_MODE_ON()
+//	{
+//		$sql = "DELETE * FROM List";
+//		mysqli_query($conn,$sql);
+//	}
 }
 ?>

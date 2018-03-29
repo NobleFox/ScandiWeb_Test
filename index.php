@@ -21,6 +21,7 @@
 	<?php
 		include_once 'include/connect.php';
 		include 'include/toolbox.php';
+		include 'include/furniture.php';
 	?>
 	<!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	<!-- Start -->
@@ -268,20 +269,9 @@
 	        <!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	        <!-- Show Furniture -->
 	        <?php 
-				$second = new ToolBox();
-				$result = $conn->query($second->ShowMeTheList('Furniture', $conn));
-				//print_r($result->fetch_assoc());
-				while ($data = $result->fetch_assoc()):
-				if($data["SKU"] && $data["Dimensions"] !== NULL){
-					?>
-	        		<div class="list_product col-sm filter Furniture">
-						<?php 
-							echo "SKU: ".$data["SKU"]."</br>"."Name: ".$data["Name"]."</br>"."Price: ".$data["Price"]." EUR"."</br>"."Dimension: ".$data["Dimensions"]."</br>";
-						?>
-					</div>
-					<?php
-				}
-				endwhile;?>
+				$second = new Furniture();
+				$second->show('Furniture', $conn);
+			?>
 	    </div>
 	        <!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	        <!-- Sorting -->
