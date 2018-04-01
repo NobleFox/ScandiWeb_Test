@@ -22,6 +22,8 @@
 		include_once 'include/connect.php';
 		include 'include/toolbox.php';
 		include 'include/furniture.php';
+		include 'include/book.php';
+		include 'include/DVD.php';
 	?>
 	<!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	<!-- Start -->
@@ -45,46 +47,11 @@
 	</div>
 	<!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	<!-- Hide/Show add/List -->
-	<script>
-		$(document).ready(function(){
-			$("form").hide();
-			$open_add = false;
-    		$("#add_btn").click(function(){
-    			if($open_add){
-        			$("form").hide(1000);
-            		$open_add = false;
-        		}else{
-        			$("form").show(1000);
-        			$(".fluid-container.List").hide(1000);
-            		$open_list = false;
-            		$open_add = true;
-            		$('html, body').animate({
-            			scrollTop:$('form').offset().top
-            		},1000);
-        		}
-    		});
-    		$(".fluid-container.List").hide();
-			$open_list = false;
-    		$("#show_btn").click(function(){
-    			if($open_list){
-        			$(".fluid-container.List").hide(1000);
-            		$open_list = false;
-        		}else{
-        			$(".fluid-container.List").show(1000);
-        			$("form").hide(1000);
-            		$open_add = false;
-            		$open_list = true;
-            		$('html, body').animate({
-            			scrollTop:$('.fluid-container.List').offset().top
-            		},1000);
-        		}
-    		});
-		});
-	</script>
+	<script src="js/hide_show.js"></script>
 	
 	<!-- List Add -->
 
-	<form class="container" method="post" action="">
+	<form class="container" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		<div class="form-group">
 			<label class="control-label col-md-2" for="SKU">SKU</label><input type="number" min="0" name="SKU" placeholder="">
 		</div>
@@ -92,7 +59,7 @@
 			<label class="control-label col-md-2" for="Name">Name</label><input type="text" name="Name" placeholder="">
 		</div>
 		<div class="form-group">
-			<label class="control-label col-md-2" for="Price">Price</label><input type="number" min="0" name="Price" placeholder="0.00" style="text-align: right;"> <strong>EUR</strong>
+			<label class="control-label col-md-2" for="Price">Price</label><input type="number" min="0" name="Price" placeholder="" style="text-align: right;"> <strong>EUR</strong>
 		</div>
 		<!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 		<!-- Switcher -->
@@ -115,22 +82,7 @@
 		</div>
 		<!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 		<!-- Switcher add's -->
-		<script type="text/javascript">
-			$(document).ready(function(){
-    			$("select").change(function(){
-        			$(this).find("option:selected").each(function(){
-        				$(".form-group.switched").hide();
-            			var gg = $(this).attr("value");
-            			if(gg){
-            				$("." + gg).show(1000);
-                			$(".form-group.switched").not("." + gg).hide();
-            			} else{
-               				$(".form-group.switched").hide();
-            			}
-        			});
-    			}).change();
-			});
-		</script>
+		<script src="js/switcher.js"></script>
 
 		<!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 		<!-- Swither inner input-->
@@ -184,26 +136,32 @@
 	<!-- Add to DB -->
 	<?php 
 		if (isset($_POST['btn1'])) {
-			$first = new ToolBox();
-			if ($_POST['SKU'] && $_POST['Name'] && $_POST['Price'] != NULL) {
-				if (($_POST['Weight'] || $_POST['Size']) && $_POST['switch'] != Null || ($_POST['Width'] && $_POST['Height'] && $_POST['Length'] && $_POST['switch'] ) != NULL) {
-					if ($first->Check($_POST['SKU'], $conn)) {
-						$first->addToList($_POST['SKU'], $_POST['Name'], $_POST['Price'], $conn);
-						$first->Weight = $_POST['Weight'];
-						$first->Size = $_POST['Size'];
-						$first->Dim = $_POST['Width'].'x'.$_POST['Height'].'x'.$_POST['Length'];
-						$first->addToSecondaryList($_POST['switch'], $_POST['SKU'], $conn);
-					}else{
-						echo "<script>alert('Already exists');</script>";
+			switch ($_POST['switch']) {
+				case 'DVD':
+					$dvd = new DVD();
+					foreach ($_POST as $key => $value) {
+						$dvd->__set($key, $value);	
 					}
-				}else{
-					echo "<script>alert('Second part is incorrect');</script>";
-				}
-			}else{
-				echo "<script>alert('First part is incorrect');</script>";
+					$dvd->addDVD($conn);
+				break;
+				case 'Book':
+					$book = new Book();
+					foreach ($_POST as $key => $value) {
+						$book->__set($key, $value);	
+					}
+					$book->addBook($conn);
+				break;
+				
+				case 'Furniture':
+					$furniture = new Furniture();
+					foreach ($_POST as $key => $value) {
+						$furniture->__set($key, $value);
+					}
+					$furniture->addFurniture($conn);
+				break;
 			}
-
 		}
+		
 	?>	
 
 	<!-- List show -->
@@ -213,59 +171,28 @@
 	        <div class="list col-lg-12 col-md-12 col-sm-12 col-xs-12">
 	            <h1 class="Title">List</h1>
 	        </div>
-			
 			<div align="center">
 	            <button class="btn btn-default filter-button" data-filter="all">All</button>
 	            <button class="btn btn-default filter-button" data-filter="DVD">DVD</button>
 	            <button class="btn btn-default filter-button" data-filter="Book">Books</button>
 	            <button class="btn btn-default filter-button" data-filter="Furniture">Furniture</button>
-			<form method="post">
-	            <button class="btn btn-default" name="DALEK" type="submit">MASS DELETE</button>
-	        </div>
-			</form>
-	        
-
-			<?php 
-				$gg = new ToolBox();
-				if(isset($_POST['DALEK'])){
-					$gg->DALEK_MODE_ON();
-				}
-			?>
+				<form method="post">
+		            <button class="btn btn-default" name="DALEK" type="submit">MASS DELETE</button>
+				</form>
+			</div>
 
 	        <!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	        <!-- Show DVD -->
 	        <?php 
-				$second = new ToolBox();
-				$result = $conn->query($second->ShowMeTheList('DVD', $conn));
-				//print_r($result->fetch_assoc());
-				while ($data = $result->fetch_assoc()):
-				if($data["SKU"] && $data["Size"] !== NULL){
-					?>
-	        		<div class="list_product col-sm filter DVD">
-						<?php 
-							echo "SKU: ".$data["SKU"]."</br>"."Name: ".$data["Name"]."</br>"."Price: ".$data["Price"]." EUR"."</br>"."Size: ".$data["Size"]." mb"."</br>";
-						?>
-					</div>
-					<?php
-				}
-				endwhile;?>
+				$second = new DVD();
+				$second->show('DVD', $conn);
+			?>
 	        <!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	        <!-- Show Books -->
 	        <?php 
-				$second = new ToolBox();
-				$result = $conn->query($second->ShowMeTheList('Book', $conn));
-				//print_r($result->fetch_assoc());
-				while ($data = $result->fetch_assoc()):
-				if($data["SKU"] && $data["Weight"] !== NULL){
-					?>
-	        		<div class="list_product col-sm filter Book">
-						<?php 
-							echo "SKU: ".$data["SKU"]."</br>"."Name: ".$data["Name"]."</br>"."Price: ".$data["Price"]." EUR"."</br>"."Weight: ".$data["Weight"]." kg"."</br>";
-						?>
-					</div>
-					<?php
-				}
-				endwhile;?>
+				$second = new Book();
+				$second->show('Book', $conn);
+			?>
 	        <!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	        <!-- Show Furniture -->
 	        <?php 
@@ -275,20 +202,7 @@
 	    </div>
 	        <!-- //////////////////////////////////////////////////////////////////////////////////////////// -->
 	        <!-- Sorting -->
-	        <script>
-	        	$(document).ready(function(){
-    				$(".filter-button").click(function(){
-        				var value = $(this).attr('data-filter');
-				        if(value == "all"){
-				            $('.filter').show('1000');
-				        }
-				        else{
-				            $(".filter").not('.'+value).hide('3000');
-				            $('.filter').filter('.'+value).show('3000');   
-				    	}
-    				});
-				});
-	        </script>
+	        <script src="js/sorting.js"></script>
 		</div>
 	</div>
 	<!-- there no way to call function -->
